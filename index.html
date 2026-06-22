@@ -1,0 +1,1102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CLEAR LAW · Clarity Over Clutter</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --black: #000000;
+    --white: #FFFFFF;
+    --gray: #999999;
+    --gray-dim: #444444;
+    --accent: #E5E5E5;
+    --accent-dim: rgba(229, 229, 229, 0.15);
+    --accent-glow: rgba(229, 229, 229, 0.35);
+    --font: 'Montserrat', sans-serif;
+    /* Mobile-first spacing scale */
+    --space-section: 5rem;
+    --space-hero-top: 7rem;
+    --space-hero-bottom: 4rem;
+    --pad-x: 1.4rem;
+  }
+
+  @media (min-width: 600px) {
+    :root {
+      --space-section: 7rem;
+      --space-hero-top: 9rem;
+      --space-hero-bottom: 5rem;
+      --pad-x: 2.4rem;
+    }
+  }
+
+  @media (min-width: 900px) {
+    :root {
+      --space-section: 8rem;
+      --space-hero-top: 10rem;
+      --space-hero-bottom: 6rem;
+      --pad-x: 2.4rem;
+    }
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--black);
+    color: var(--white);
+    font-family: var(--font);
+    font-weight: 300;
+    line-height: 1.8;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ─── SCROLL REVEAL ─── */
+  .reveal {
+    opacity: 0;
+    transform: translateY(28px);
+    transition: opacity 0.85s cubic-bezier(0.22, 1, 0.36, 1),
+                transform 0.85s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .reveal-delay-1 { transition-delay: 0.1s; }
+  .reveal-delay-2 { transition-delay: 0.22s; }
+  .reveal-delay-3 { transition-delay: 0.36s; }
+  .reveal-delay-4 { transition-delay: 0.52s; }
+  .reveal-delay-5 { transition-delay: 0.68s; }
+
+  /* ─── NAV ─── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    padding: 1.2rem var(--pad-x);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: linear-gradient(to bottom, rgba(0,0,0,0.92) 0%, transparent 100%);
+    backdrop-filter: blur(2px);
+    gap: 1rem;
+  }
+
+  .wordmark {
+    font-weight: 800;
+    font-size: 1rem;
+    letter-spacing: 0.25em;
+    color: var(--white);
+    text-decoration: none;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .wordmark span { color: var(--accent); }
+
+  .nav-tagline {
+    font-size: 0.6rem;
+    font-weight: 300;
+    letter-spacing: 0.15em;
+    color: var(--gray);
+    text-transform: uppercase;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* Hide tagline on very small screens */
+  @media (max-width: 360px) {
+    .nav-tagline { display: none; }
+  }
+
+  /* ─── HERO ─── */
+  .hero {
+    min-height: 100svh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: var(--space-hero-top) var(--pad-x) var(--space-hero-bottom);
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .hero-line {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: lineReveal 0.9s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  }
+  .hero-line:nth-child(1) { animation-delay: 0.3s; }
+  .hero-line:nth-child(2) { animation-delay: 0.65s; }
+  .hero-line:nth-child(3) { animation-delay: 1.0s; }
+  .hero-line:nth-child(4) { animation-delay: 1.35s; }
+  .hero-line:nth-child(5) { animation-delay: 1.7s; }
+
+  @keyframes lineReveal {
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .hero-eyebrow {
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.3em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 1.6rem;
+  }
+
+  @media (min-width: 600px) {
+    .hero-eyebrow { margin-bottom: 2.4rem; }
+  }
+
+  .hero-headline {
+    font-size: clamp(2rem, 7vw, 4.8rem);
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.5rem;
+  }
+
+  .hero-headline-alt {
+    font-size: clamp(2rem, 7vw, 4.8rem);
+    font-weight: 300;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    color: var(--gray);
+    margin-bottom: 2rem;
+  }
+
+  @media (min-width: 600px) {
+    .hero-headline-alt { margin-bottom: 3rem; }
+  }
+
+  .hero-body {
+    font-size: clamp(0.95rem, 2.5vw, 1.15rem);
+    font-weight: 300;
+    color: var(--gray);
+    max-width: 560px;
+    margin-bottom: 2.6rem;
+  }
+
+  @media (min-width: 600px) {
+    .hero-body { margin-bottom: 3.6rem; }
+  }
+
+  /* ─── CTA BUTTON ─── */
+  .cta-btn {
+    display: inline-block;
+    padding: 1rem 2rem;
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    background: transparent;
+    font-family: var(--font);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background 0.3s ease, box-shadow 0.3s ease, transform 0.15s ease;
+    position: relative;
+    overflow: hidden;
+    /* Full width on mobile, auto on larger */
+    width: 100%;
+    text-align: center;
+  }
+
+  @media (min-width: 480px) {
+    .cta-btn { width: auto; }
+  }
+
+  @media (hover: hover) {
+    .cta-btn:hover {
+      background: var(--accent-dim);
+      box-shadow: 0 0 24px var(--accent-glow), 0 0 48px rgba(229,229,229,0.1);
+      transform: translateY(-1px);
+    }
+    .cta-btn:hover::after { opacity: 1; }
+  }
+
+  .cta-btn:active {
+    transform: scale(0.97);
+  }
+
+  .cta-btn::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at center, var(--accent-glow) 0%, transparent 70%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+  }
+
+  /* ─── SECTION WRAPPER ─── */
+  section {
+    padding: var(--space-section) var(--pad-x);
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .section-divider {
+    width: 1px;
+    height: 60px;
+    background: linear-gradient(to bottom, transparent, var(--gray-dim), transparent);
+    margin: 0 auto;
+  }
+
+  @media (min-width: 600px) {
+    .section-divider { height: 80px; }
+  }
+
+  /* ─── STORY SECTIONS ─── */
+  .section-label {
+    font-size: 0.6rem;
+    font-weight: 600;
+    letter-spacing: 0.35em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 1.6rem;
+  }
+
+  @media (min-width: 600px) {
+    .section-label { margin-bottom: 2.4rem; font-size: 0.65rem; }
+  }
+
+  .section-headline {
+    font-size: clamp(1.6rem, 5vw, 3.2rem);
+    font-weight: 800;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    margin-bottom: 1.4rem;
+  }
+
+  @media (min-width: 600px) {
+    .section-headline { margin-bottom: 2rem; }
+  }
+
+  .section-body {
+    font-size: clamp(0.9rem, 2vw, 1.05rem);
+    font-weight: 300;
+    color: var(--gray);
+    line-height: 1.9;
+    max-width: 620px;
+  }
+
+  .section-body + .section-body {
+    margin-top: 1.4rem;
+  }
+
+  /* ─── WHAT IS CLEAR LAW ─── */
+  .about-block {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2.4rem;
+  }
+
+  /* BUG FIX: was 1fr 1fr which left 3rd stat orphaned. Use repeat(auto-fit) */
+  @media (min-width: 560px) {
+    .about-block { grid-template-columns: repeat(3, 1fr); gap: 3rem; }
+  }
+
+  .about-stat {
+    border-top: 1px solid var(--gray-dim);
+    padding-top: 1.6rem;
+  }
+
+  .stat-number {
+    font-size: clamp(2rem, 5vw, 3rem);
+    font-weight: 800;
+    color: var(--accent);
+    line-height: 1;
+    margin-bottom: 0.6rem;
+  }
+
+  .stat-label {
+    font-size: 0.82rem;
+    font-weight: 300;
+    color: var(--gray);
+    line-height: 1.6;
+  }
+
+  /* ─── BENEFITS ─── */
+  .benefit {
+    padding: 2rem 0;
+    border-bottom: 1px solid var(--gray-dim);
+  }
+
+  @media (min-width: 600px) {
+    .benefit { padding: 2.8rem 0; }
+  }
+
+  .benefit:first-child { border-top: 1px solid var(--gray-dim); }
+
+  .benefit-number {
+    font-size: 0.65rem;
+    font-weight: 600;
+    color: var(--accent);
+    letter-spacing: 0.2em;
+    margin-bottom: 0.6rem;
+  }
+
+  .benefit-title {
+    font-size: clamp(1rem, 2.5vw, 1.5rem);
+    font-weight: 700;
+    margin-bottom: 0.6rem;
+    line-height: 1.3;
+  }
+
+  .benefit-desc {
+    font-size: 0.92rem;
+    font-weight: 300;
+    color: var(--gray);
+    line-height: 1.8;
+  }
+
+  /* ─── PEAK MOMENT ─── */
+  .peak-section {
+    padding: 6rem var(--pad-x);
+    text-align: center;
+  }
+
+  @media (min-width: 600px) {
+    .peak-section { padding: 10rem var(--pad-x); }
+  }
+
+  .peak-line {
+    font-size: clamp(1.4rem, 5vw, 3rem);
+    font-weight: 700;
+    line-height: 1.3;
+    max-width: 700px;
+    margin: 0 auto 2.4rem;
+    letter-spacing: -0.01em;
+  }
+
+  @media (min-width: 600px) {
+    .peak-line { margin-bottom: 3rem; }
+  }
+
+  .peak-line em {
+    font-style: normal;
+    color: var(--accent);
+  }
+
+  /* ─── FORM SECTION ─── */
+  .form-section {
+    padding: 4rem var(--pad-x) 6rem;
+    max-width: 760px;
+    margin: 0 auto;
+  }
+
+  @media (min-width: 600px) {
+    .form-section { padding: 6rem var(--pad-x) 10rem; }
+  }
+
+  .form-intro {
+    margin-bottom: 2.4rem;
+  }
+
+  @media (min-width: 600px) {
+    .form-intro { margin-bottom: 4rem; }
+  }
+
+  .form-pre-cta {
+    font-size: clamp(1.1rem, 3.5vw, 2rem);
+    font-weight: 700;
+    margin-bottom: 2.4rem;
+    line-height: 1.3;
+  }
+
+  @media (min-width: 600px) {
+    .form-pre-cta { margin-bottom: 3rem; }
+  }
+
+  form { width: 100%; }
+
+  .form-group {
+    margin-bottom: 2rem;
+  }
+
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.6rem;
+  }
+
+  @media (min-width: 600px) {
+    .form-row { grid-template-columns: 1fr 1fr; gap: 2rem; }
+  }
+
+  label {
+    display: block;
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gray);
+    margin-bottom: 0.7rem;
+  }
+
+  label .req {
+    color: var(--accent);
+    margin-left: 2px;
+  }
+
+  input[type="text"],
+  input[type="email"],
+  input[type="tel"],
+  input[type="url"],
+  select,
+  textarea {
+    width: 100%;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid var(--gray-dim);
+    color: var(--white);
+    font-family: var(--font);
+    font-size: 1rem; /* Keep at 1rem to prevent iOS zoom on focus */
+    font-weight: 300;
+    padding: 0.9rem 0;
+    outline: none;
+    transition: border-color 0.3s ease;
+    -webkit-appearance: none;
+    border-radius: 0;
+    /* Better tap targets */
+    min-height: 44px;
+  }
+
+  /* BUG FIX: select had no custom arrow and -webkit-appearance:none hid the native one */
+  .select-wrapper {
+    position: relative;
+  }
+  .select-wrapper::after {
+    content: '';
+    position: absolute;
+    right: 4px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 6px solid var(--gray);
+    pointer-events: none;
+  }
+  .select-wrapper select {
+    padding-right: 1.6rem;
+    cursor: pointer;
+    /* BUG FIX: select was always gray; changes to white when a value is chosen */
+    color: var(--gray);
+  }
+  .select-wrapper select.has-value {
+    color: var(--white);
+  }
+
+  select option {
+    background: #111;
+    color: var(--white);
+  }
+
+  input:focus,
+  select:focus,
+  textarea:focus {
+    border-color: var(--accent);
+  }
+
+  textarea {
+    resize: vertical;
+    min-height: 90px;
+    line-height: 1.7;
+    padding-top: 0.5rem;
+  }
+
+  /* CHECKBOX */
+  input[type="checkbox"] {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 18px;
+    height: 18px;
+    min-height: 18px;
+    border: 1px solid var(--gray-dim);
+    background: transparent;
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s;
+    flex-shrink: 0;
+    position: relative;
+    border-radius: 0;
+  }
+
+  input[type="checkbox"]:checked {
+    border-color: var(--accent);
+    background: var(--accent-dim);
+  }
+
+  input[type="checkbox"]:checked::after {
+    content: '';
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -52%) rotate(45deg);
+    width: 4px; height: 8px;
+    border-right: 2px solid var(--accent);
+    border-bottom: 2px solid var(--accent);
+  }
+
+  /* Terms checkbox */
+  .terms-check {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+
+  .terms-check label {
+    font-size: 0.85rem;
+    font-weight: 300;
+    letter-spacing: 0;
+    text-transform: none;
+    color: var(--gray);
+    cursor: pointer;
+    line-height: 1.6;
+    margin-bottom: 0;
+  }
+
+  .terms-check a { color: var(--accent); text-decoration: none; }
+
+  .form-submit-block {
+    margin-top: 3rem;
+    text-align: center;
+  }
+
+  .cta-btn-large {
+    padding: 1.1rem 2.4rem;
+    font-size: 0.82rem;
+  }
+
+  /* On mobile, large CTA is full width */
+  @media (max-width: 479px) {
+    .cta-btn-large {
+      display: block;
+      width: 100%;
+    }
+  }
+
+  .form-note {
+    font-size: 0.72rem;
+    color: var(--gray-dim);
+    margin-top: 1.4rem;
+  }
+
+  /* ─── FEE NOTICE ─── */
+  .fee-notice {
+    border: 1px solid var(--gray-dim);
+    padding: 1.4rem 1.4rem;
+    margin-bottom: 0.4rem;
+  }
+
+  @media (min-width: 600px) {
+    .fee-notice { padding: 1.6rem 1.8rem; }
+  }
+
+  .fee-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+  }
+
+  .fee-label {
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gray);
+  }
+
+  .fee-amount {
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: var(--white);
+  }
+
+  @media (min-width: 600px) {
+    .fee-amount { font-size: 1.8rem; }
+  }
+
+  .fee-sub {
+    font-size: 0.78rem;
+    color: var(--gray-dim);
+    margin-top: 0.5rem;
+    line-height: 1.6;
+  }
+
+  /* ─── FOOTER ─── */
+  footer {
+    border-top: 1px solid var(--gray-dim);
+    padding: 3rem var(--pad-x);
+    text-align: center;
+  }
+
+  @media (min-width: 600px) {
+    footer { padding: 4rem var(--pad-x); }
+  }
+
+  .footer-wordmark {
+    font-size: 1rem;
+    font-weight: 800;
+    letter-spacing: 0.3em;
+    color: var(--white);
+    margin-bottom: 0.6rem;
+  }
+
+  .footer-wordmark span { color: var(--accent); }
+
+  .footer-tagline {
+    font-size: 0.68rem;
+    font-weight: 300;
+    letter-spacing: 0.2em;
+    color: var(--gray-dim);
+    text-transform: uppercase;
+    margin-bottom: 1.6rem;
+  }
+
+  .footer-copy {
+    font-size: 0.68rem;
+    color: var(--gray-dim);
+  }
+
+  /* ─── UTILITY ─── */
+  .accent { color: var(--accent); }
+  .mt-2 { margin-top: 2rem; }
+  .mt-4 { margin-top: 3rem; }
+
+  @media (min-width: 600px) {
+    .mt-4 { margin-top: 4rem; }
+  }
+
+  .center { text-align: center; }
+
+  /* ─── ERROR STATE ─── */
+  .field-error {
+    border-bottom-color: #e88 !important;
+  }
+  .checkbox-error {
+    outline: 1px solid #e88 !important;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .reveal, .hero-line {
+      animation: none;
+      transition: none;
+      opacity: 1;
+      transform: none;
+    }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="wordmark">CLEAR<span>&nbsp;LAW</span></a>
+  <span class="nav-tagline">Clarity Over Clutter</span>
+</nav>
+
+<!-- HERO -->
+<header>
+  <div class="hero">
+    <p class="hero-eyebrow hero-line">A Call to Legal Minds</p>
+    <h1 class="hero-headline hero-line">Every great legal mind</h1>
+    <p class="hero-headline-alt hero-line">started with one published page.</p>
+    <p class="hero-body hero-line">
+      You have thought it, argued it, drafted it in margins at midnight. Now it deserves to be read.
+      CLEAR LAW exists for the legal voices that have something real to say and need a platform worthy of saying it.
+    </p>
+    <div class="hero-line">
+      <a href="#form" class="cta-btn">Start Your Author Journey</a>
+    </div>
+  </div>
+</header>
+
+<div class="section-divider"></div>
+
+<!-- WHAT IS CLEAR LAW -->
+<section aria-labelledby="about-heading">
+  <p class="section-label reveal">What We Are</p>
+  <h2 class="section-headline reveal reveal-delay-1" id="about-heading">
+    Not another legal journal.<br>A living record of legal thought.
+  </h2>
+  <p class="section-body reveal reveal-delay-2">
+    CLEAR LAW is a peer-reviewed digital publication dedicated to legal scholarship that actually reaches people:
+    practitioners, students, judges, and curious minds who want to understand the law, not just cite it.
+  </p>
+  <p class="section-body reveal reveal-delay-3">
+    We publish articles, case commentaries, legislative analyses, and opinion pieces across every domain of Indian and
+    international law. Our editorial philosophy is simple: if it's clear, it belongs here.
+  </p>
+
+  <div class="about-block mt-4">
+    <div class="about-stat reveal reveal-delay-1">
+      <div class="stat-number">10K+</div>
+      <div class="stat-label">Readers across practice areas, academia, and judiciary</div>
+    </div>
+    <div class="about-stat reveal reveal-delay-2">
+      <div class="stat-number">Open</div>
+      <div class="stat-label">Access publication. Your work reaches everyone, not just subscribers</div>
+    </div>
+    <div class="about-stat reveal reveal-delay-3">
+      <div class="stat-number">48h</div>
+      <div class="stat-label">Average editorial response time. Because your time matters too</div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- WHO THIS IS FOR -->
+<section aria-labelledby="who-heading">
+  <p class="section-label reveal">Who We Are Looking For</p>
+  <h2 class="section-headline reveal reveal-delay-1" id="who-heading">
+    You have a point of view.<br>We have the platform.
+  </h2>
+  <p class="section-body reveal reveal-delay-2">
+    Whether you are a law student writing your first note on a landmark judgment, a seasoned advocate with a critique
+    of a recent statute, or an academic building a body of scholarship: this page is for you.
+  </p>
+  <p class="section-body reveal reveal-delay-3">
+    CLEAR LAW does not care how many papers you have published before. It cares about one thing:
+    whether what you have to say is clear, honest, and legally rigorous. The rest, we help you build.
+  </p>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- BENEFITS -->
+<section aria-labelledby="benefits-heading">
+  <p class="section-label reveal">What You Get When You Join Us</p>
+  <h2 class="section-headline reveal reveal-delay-1" id="benefits-heading">Your work, properly placed.</h2>
+
+  <div class="benefit reveal reveal-delay-1">
+    <p class="benefit-number">01</p>
+    <h3 class="benefit-title">A byline that means something</h3>
+    <p class="benefit-desc">
+      Every published article carries your full name, designation, and institutional affiliation, properly formatted,
+      permanently linked, and indexed for citation. Not a blog post. A publication.
+    </p>
+  </div>
+
+  <div class="benefit reveal reveal-delay-2">
+    <p class="benefit-number">02</p>
+    <h3 class="benefit-title">Editorial support, not gatekeeping</h3>
+    <p class="benefit-desc">
+      Our editorial team works with you, not above you. Feedback is constructive, communication is direct,
+      and revisions are collaborative. We are not here to reject; we are here to refine.
+    </p>
+  </div>
+
+  <div class="benefit reveal reveal-delay-3">
+    <p class="benefit-number">03</p>
+    <h3 class="benefit-title">Distribution to a real audience</h3>
+    <p class="benefit-desc">
+      We do not publish into a void. Your article reaches our curated reader network: students, advocates, academics,
+      and legal professionals through our newsletter, social channels, and partner platforms.
+    </p>
+  </div>
+
+  <div class="benefit reveal reveal-delay-4">
+    <p class="benefit-number">04</p>
+    <h3 class="benefit-title">A growing author community</h3>
+    <p class="benefit-desc">
+      Once published, you become part of the CLEAR LAW author network, with opportunities for co-authorship,
+      symposium participation, and institutional partnerships that open doors long after your article goes live.
+    </p>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- WHAT WE PUBLISH -->
+<section aria-labelledby="publish-heading">
+  <p class="section-label reveal">What We Publish</p>
+  <h2 class="section-headline reveal reveal-delay-1" id="publish-heading">Every form legal thought takes.</h2>
+  <p class="section-body reveal reveal-delay-2">
+    Research articles. Case commentaries. Legislative analyses. Book reviews. Opinion pieces. Policy notes.
+    Student notes. Comparative legal studies. If it engages seriously with the law and is written to be understood,
+    we want to read it.
+  </p>
+  <p class="section-body reveal reveal-delay-3">
+    We publish work in all domains of law: constitutional, criminal, civil, corporate, intellectual property,
+    environmental, family, international, and more. If your area of law exists, CLEAR LAW has a page for it.
+  </p>
+</section>
+
+<!-- PEAK / EMOTIONAL MOMENT -->
+<div class="peak-section">
+  <p class="peak-line reveal">
+    Somewhere, a reader is waiting for<br>
+    <em>an article only you can write.</em>
+  </p>
+  <a href="#form" class="cta-btn reveal reveal-delay-1">Begin Your Registration</a>
+</div>
+
+<!-- FORM -->
+<div class="form-section" id="form">
+  <div class="form-intro reveal">
+    <p class="section-label">Author Registration</p>
+    <h2 class="section-headline">Tell us who you are.<br>We'll take it from here.</h2>
+    <p class="section-body">
+      Just a name, an email, and who you are. Everything else can wait until we talk.
+    </p>
+  </div>
+
+  <p class="form-pre-cta reveal">Takes under a minute. Promise.</p>
+
+  <form id="author-form" novalidate>
+
+    <!-- Name + Email -->
+    <div class="form-group reveal">
+      <div class="form-row">
+        <div>
+          <label for="full-name">Full Name <span class="req">*</span></label>
+          <input type="text" id="full-name" name="full_name" placeholder="Aarav Mehta" required autocomplete="name">
+        </div>
+        <div>
+          <label for="email">Email <span class="req">*</span></label>
+          <input type="email" id="email" name="email" placeholder="you@example.com" required autocomplete="email">
+        </div>
+      </div>
+    </div>
+
+    <!-- Role -->
+    <div class="form-group reveal">
+      <div class="form-row">
+        <div>
+          <label for="role">You are a <span class="req">*</span></label>
+          <!-- BUG FIX: wrapped in .select-wrapper for custom arrow -->
+          <div class="select-wrapper">
+            <select id="role" name="role" required>
+              <option value="" disabled selected>Select one</option>
+              <option value="law_student">Law Student</option>
+              <option value="llm_phd">LLM / PhD Scholar</option>
+              <option value="advocate">Advocate / Lawyer</option>
+              <option value="academic">Academic / Professor</option>
+              <option value="judge">Judicial Officer</option>
+              <option value="legal_professional">Other Legal Professional</option>
+            </select>
+          </div>
+        </div>
+        <div>
+          <label for="institution">Institution (optional)</label>
+          <input type="text" id="institution" name="institution" placeholder="National Law School of India">
+        </div>
+      </div>
+    </div>
+
+    <!-- Idea, optional -->
+    <div class="form-group reveal">
+      <label for="article_idea">What do you want to write about? <span style="text-transform:none; letter-spacing:0; color: var(--gray-dim);">(optional, you can share this later)</span></label>
+      <textarea id="article_idea" name="article_idea"
+        placeholder="A line or two is plenty. You can skip this and tell us later."></textarea>
+    </div>
+
+    <!-- Terms -->
+    <div class="form-group reveal">
+      <div class="terms-check">
+        <input type="checkbox" id="terms" name="terms" required>
+        <label for="terms">
+          I agree to CLEAR LAW's <a href="#">Editorial Guidelines</a> and <a href="#">Publication Terms</a>.
+        </label>
+      </div>
+    </div>
+
+    <!-- Fee notice -->
+    <div class="fee-notice reveal">
+      <div class="fee-row">
+        <span class="fee-label">Registration Fee</span>
+        <span class="fee-amount">&#x20B9;499</span>
+      </div>
+      <p class="fee-sub">One-time, covers editorial review and processing. Paid securely via Razorpay.</p>
+    </div>
+
+    <!-- Submit -->
+    <div class="form-submit-block reveal">
+      <button type="submit" class="cta-btn cta-btn-large" id="pay-btn">Register &amp; Pay &#x20B9;499</button>
+      <p class="form-note">Secured by Razorpay &middot; We will respond within 48 hours.</p>
+    </div>
+
+  </form>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-wordmark">CLEAR<span>&nbsp;LAW</span></div>
+  <p class="footer-tagline">Clarity Over Clutter</p>
+  <p class="footer-copy">&copy; 2025 CLEAR LAW. All rights reserved.</p>
+</footer>
+
+<script>
+  // ─── SCROLL REVEAL ───
+  const revealEls = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.08, rootMargin: '0px 0px -30px 0px' });
+  revealEls.forEach(el => observer.observe(el));
+
+  // BUG FIX: select color when a value is chosen
+  const roleSelect = document.getElementById('role');
+  roleSelect.addEventListener('change', function() {
+    this.classList.toggle('has-value', this.value !== '');
+  });
+
+  // ─── FORM SUBMIT ───
+  document.getElementById('author-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    // Clear previous error states
+    this.querySelectorAll('.field-error').forEach(el => el.classList.remove('field-error'));
+    this.querySelectorAll('.checkbox-error').forEach(el => el.classList.remove('checkbox-error'));
+
+    const required = this.querySelectorAll('[required]');
+    let valid = true;
+    let firstInvalid = null;
+
+    required.forEach(field => {
+      if (field.type === 'checkbox') {
+        if (!field.checked) {
+          valid = false;
+          field.classList.add('checkbox-error');
+          if (!firstInvalid) firstInvalid = field;
+        }
+      } else {
+        // BUG FIX: also catches select with empty value
+        if (!field.value.trim()) {
+          valid = false;
+          field.classList.add('field-error');
+          if (!firstInvalid) firstInvalid = field;
+        }
+      }
+    });
+
+    if (valid) {
+      openRazorpayCheckout(this);
+    } else {
+      // Scroll first invalid field into view on mobile
+      if (firstInvalid) {
+        firstInvalid.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+      // BUG FIX: shake without permanently overriding the CSS transition
+      const btn = this.querySelector('[type="submit"]');
+      btn.classList.add('shaking');
+      btn.addEventListener('animationend', () => btn.classList.remove('shaking'), { once: true });
+    }
+  });
+
+  // Clear error state on input/change
+  document.querySelectorAll('input, textarea, select').forEach(el => {
+    el.addEventListener('input', () => el.classList.remove('field-error', 'checkbox-error'));
+    el.addEventListener('change', () => el.classList.remove('field-error', 'checkbox-error'));
+  });
+
+  // ─── RAZORPAY CHECKOUT ───
+  // NOTE TO DEVELOPER:
+  // Replace RAZORPAY_KEY_ID with your real key from Razorpay Dashboard > Settings > API Keys.
+  // For production, create the order server-side and verify payment signature after success.
+  // See: https://razorpay.com/docs/payments/payment-gateway/web-integration/standard/
+  const RAZORPAY_KEY_ID = 'rzp_test_XXXXXXXXXXXXXX'; // replace with your actual key_id
+  const REGISTRATION_FEE_PAISE = 49900; // Rs.499 in paise
+
+  function loadRazorpayScript() {
+    return new Promise((resolve, reject) => {
+      if (window.Razorpay) { resolve(); return; }
+      const script = document.createElement('script');
+      script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+      script.onload = resolve;
+      script.onerror = () => reject(new Error('Razorpay SDK failed to load'));
+      document.body.appendChild(script);
+    });
+  }
+
+  // BUG FIX: store original HTML (with entity) so re-setting it is correct
+  const payBtn = document.getElementById('pay-btn');
+  const PAY_BTN_HTML = payBtn.innerHTML;
+
+  async function openRazorpayCheckout(formEl) {
+    const btn = formEl.querySelector('#pay-btn');
+    btn.innerHTML = 'Loading payment&hellip;';
+    btn.disabled = true;
+
+    try {
+      await loadRazorpayScript();
+    } catch (err) {
+      btn.textContent = 'Could not load payment. Check connection and retry.';
+      btn.disabled = false;
+      setTimeout(() => { btn.innerHTML = PAY_BTN_HTML; }, 3500);
+      return;
+    }
+
+    const fullName = formEl.querySelector('#full-name').value.trim();
+    const email = formEl.querySelector('#email').value.trim();
+
+    const options = {
+      key: RAZORPAY_KEY_ID,
+      amount: REGISTRATION_FEE_PAISE,
+      currency: 'INR',
+      name: 'CLEAR LAW',
+      description: 'Author Registration Fee',
+      prefill: { name: fullName, email: email },
+      theme: { color: '#000000' },
+      notes: {
+        role: formEl.querySelector('#role').value,
+        institution: formEl.querySelector('#institution').value.trim(),
+        article_idea: formEl.querySelector('#article_idea').value.trim()
+      },
+      handler: function (response) {
+        // In production: verify response.razorpay_payment_id on your server
+        btn.textContent = "Payment received. We'll be in touch within 48 hours.";
+        btn.style.borderColor = '#E5E5E5';
+        btn.style.color = '#E5E5E5';
+        btn.disabled = true;
+      },
+      modal: {
+        ondismiss: function () {
+          btn.innerHTML = PAY_BTN_HTML;
+          btn.disabled = false;
+        }
+      }
+    };
+
+    const rzp = new window.Razorpay(options);
+    rzp.on('payment.failed', function () {
+      btn.textContent = 'Payment failed. Please try again.';
+      btn.disabled = false;
+      setTimeout(() => { btn.innerHTML = PAY_BTN_HTML; }, 3500);
+    });
+
+    btn.innerHTML = PAY_BTN_HTML;
+    btn.disabled = false;
+    rzp.open();
+  }
+</script>
+
+<style>
+  /* Shake animation via class, not inline style, so it doesn't override CSS transitions */
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    20% { transform: translateX(-5px); }
+    40% { transform: translateX(5px); }
+    60% { transform: translateX(-4px); }
+    80% { transform: translateX(4px); }
+  }
+  .shaking { animation: shake 0.35s ease; }
+</style>
+
+</body>
+</html>
