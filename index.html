@@ -299,9 +299,9 @@
     gap: 2.4rem;
   }
 
-  /* BUG FIX: was 1fr 1fr which left 3rd stat orphaned. Use repeat(auto-fit) */
+  /* BUG FIX: auto-fit so grid reflows cleanly regardless of stat count */
   @media (min-width: 560px) {
-    .about-block { grid-template-columns: repeat(3, 1fr); gap: 3rem; }
+    .about-block { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 3rem; }
   }
 
   .about-stat {
@@ -747,10 +747,6 @@
       <div class="stat-number">Open</div>
       <div class="stat-label">Access publication. Your work reaches everyone, not just subscribers</div>
     </div>
-    <div class="about-stat reveal reveal-delay-3">
-      <div class="stat-number">48h</div>
-      <div class="stat-label">Average editorial response time. Because your time matters too</div>
-    </div>
   </div>
 </section>
 
@@ -790,6 +786,16 @@
 
   <div class="benefit reveal reveal-delay-2">
     <p class="benefit-number">02</p>
+    <h3 class="benefit-title">A verifiable certificate of publication</h3>
+    <p class="benefit-desc">
+      Every published author receives a Certificate of Publication, complete with a unique certificate ID that
+      anyone can independently verify on our site. Add it to your resume, your LinkedIn, or your portfolio,
+      knowing it holds up to scrutiny because it is real and checkable, not just a PDF.
+    </p>
+  </div>
+
+  <div class="benefit reveal reveal-delay-3">
+    <p class="benefit-number">03</p>
     <h3 class="benefit-title">Editorial support, not gatekeeping</h3>
     <p class="benefit-desc">
       Our editorial team works with you, not above you. Feedback is constructive, communication is direct,
@@ -797,8 +803,8 @@
     </p>
   </div>
 
-  <div class="benefit reveal reveal-delay-3">
-    <p class="benefit-number">03</p>
+  <div class="benefit reveal reveal-delay-4">
+    <p class="benefit-number">04</p>
     <h3 class="benefit-title">Distribution to a real audience</h3>
     <p class="benefit-desc">
       We do not publish into a void. Your article reaches our curated reader network: students, advocates, academics,
@@ -806,12 +812,21 @@
     </p>
   </div>
 
-  <div class="benefit reveal reveal-delay-4">
-    <p class="benefit-number">04</p>
+  <div class="benefit reveal reveal-delay-5">
+    <p class="benefit-number">05</p>
     <h3 class="benefit-title">A growing author community</h3>
     <p class="benefit-desc">
       Once published, you become part of the CLEAR LAW author network, with opportunities for co-authorship,
       symposium participation, and institutional partnerships that open doors long after your article goes live.
+    </p>
+  </div>
+
+  <div class="benefit reveal reveal-delay-5">
+    <p class="benefit-number">06</p>
+    <h3 class="benefit-title">An intellectual library that's yours</h3>
+    <p class="benefit-desc">
+      Every article you publish with us adds another verified entry to your personal body of work, an indexed,
+      citable record of your legal thinking that you build piece by piece and can point to for years to come.
     </p>
   </div>
 </section>
@@ -912,19 +927,10 @@
       </div>
     </div>
 
-    <!-- Fee notice -->
-    <div class="fee-notice reveal">
-      <div class="fee-row">
-        <span class="fee-label">Registration Fee</span>
-        <span class="fee-amount">&#x20B9;499</span>
-      </div>
-      <p class="fee-sub">One-time, covers editorial review and processing. Paid securely via Razorpay.</p>
-    </div>
-
     <!-- Submit -->
     <div class="form-submit-block reveal">
-      <button type="submit" class="cta-btn cta-btn-large" id="pay-btn">Register &amp; Pay &#x20B9;499</button>
-      <p class="form-note">Secured by Razorpay &middot; We will respond within 48 hours.</p>
+      <button type="submit" class="cta-btn cta-btn-large" id="pay-btn">Register</button>
+      <p class="form-note">We will respond within 48 hours.</p>
     </div>
 
   </form>
@@ -986,7 +992,7 @@
     });
 
     if (valid) {
-      openRazorpayCheckout(this);
+      submitRegistration(this);
     } else {
       // Scroll first invalid field into view on mobile
       if (firstInvalid) {
@@ -1005,86 +1011,137 @@
     el.addEventListener('change', () => el.classList.remove('field-error', 'checkbox-error'));
   });
 
-  // ─── RAZORPAY CHECKOUT ───
-  // NOTE TO DEVELOPER:
-  // Replace RAZORPAY_KEY_ID with your real key from Razorpay Dashboard > Settings > API Keys.
-  // For production, create the order server-side and verify payment signature after success.
-  // See: https://razorpay.com/docs/payments/payment-gateway/web-integration/standard/
-  const RAZORPAY_KEY_ID = 'rzp_test_XXXXXXXXXXXXXX'; // replace with your actual key_id
-  const REGISTRATION_FEE_PAISE = 49900; // Rs.499 in paise
+  // ─── SUBMIT REGISTRATION TO MAKE.COM WEBHOOK ───
+  // NOTE TO DEVELOPER — CONNECT TO GOOGLE SHEETS VIA APPS SCRIPT:
+  // 1. Create a Google Sheet (e.g. "CLEAR LAW Registrations").
+  // 2. In the Sheet, go to Extensions > Apps Script.
+  // 3. Delete any starter code and paste in the script provided separately (Code.gs).
+  // 4. Click Deploy > New deployment > Select type: Web app.
+  //    - Execute as: Me
+  //    - Who has access: Anyone
+  // 5. Click Deploy, authorize the permissions it asks for, then copy the Web App URL.
+  // 6. Paste that URL below as APPS_SCRIPT_URL.
+  const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyxRdFw8OwoqImhhzT34rDkPqd7_Yv5IvFVeGv8BANzrcomHVqSTHlMyaaqPfGKurqF/exec';
+  const REDIRECT_URL = 'https://www.clearlaw.online/upload';
 
-  function loadRazorpayScript() {
-    return new Promise((resolve, reject) => {
-      if (window.Razorpay) { resolve(); return; }
-      const script = document.createElement('script');
-      script.src = 'https://checkout.razorpay.com/v1/checkout.js';
-      script.onload = resolve;
-      script.onerror = () => reject(new Error('Razorpay SDK failed to load'));
-      document.body.appendChild(script);
-    });
-  }
-
-  // BUG FIX: store original HTML (with entity) so re-setting it is correct
+  // BUG FIX: store original HTML so re-setting it is correct
   const payBtn = document.getElementById('pay-btn');
   const PAY_BTN_HTML = payBtn.innerHTML;
 
-  async function openRazorpayCheckout(formEl) {
+  async function submitRegistration(formEl) {
     const btn = formEl.querySelector('#pay-btn');
-    btn.innerHTML = 'Loading payment&hellip;';
+    btn.innerHTML = 'Submitting&hellip;';
     btn.disabled = true;
 
-    try {
-      await loadRazorpayScript();
-    } catch (err) {
-      btn.textContent = 'Could not load payment. Check connection and retry.';
-      btn.disabled = false;
-      setTimeout(() => { btn.innerHTML = PAY_BTN_HTML; }, 3500);
-      return;
-    }
-
-    const fullName = formEl.querySelector('#full-name').value.trim();
-    const email = formEl.querySelector('#email').value.trim();
-
-    const options = {
-      key: RAZORPAY_KEY_ID,
-      amount: REGISTRATION_FEE_PAISE,
-      currency: 'INR',
-      name: 'CLEAR LAW',
-      description: 'Author Registration Fee',
-      prefill: { name: fullName, email: email },
-      theme: { color: '#000000' },
-      notes: {
-        role: formEl.querySelector('#role').value,
-        institution: formEl.querySelector('#institution').value.trim(),
-        article_idea: formEl.querySelector('#article_idea').value.trim()
-      },
-      handler: function (response) {
-        // In production: verify response.razorpay_payment_id on your server
-        btn.textContent = "Payment received. We'll be in touch within 48 hours.";
-        btn.style.borderColor = '#E5E5E5';
-        btn.style.color = '#E5E5E5';
-        btn.disabled = true;
-      },
-      modal: {
-        ondismiss: function () {
-          btn.innerHTML = PAY_BTN_HTML;
-          btn.disabled = false;
-        }
-      }
+    const payload = {
+      full_name: formEl.querySelector('#full-name').value.trim(),
+      email: formEl.querySelector('#email').value.trim(),
+      role: formEl.querySelector('#role').value,
+      institution: formEl.querySelector('#institution').value.trim(),
+      article_idea: formEl.querySelector('#article_idea').value.trim(),
+      submitted_at: new Date().toISOString()
     };
 
-    const rzp = new window.Razorpay(options);
-    rzp.on('payment.failed', function () {
-      btn.textContent = 'Payment failed. Please try again.';
+    try {
+      // NOTE: text/plain avoids a CORS preflight, which Apps Script Web Apps don't handle.
+      // The script on the other end parses this as JSON itself.
+      await fetch(APPS_SCRIPT_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify(payload)
+      });
+      showConfirmationModal(payload.full_name);
+    } catch (err) {
+      btn.textContent = 'Something went wrong. Please try again.';
       btn.disabled = false;
       setTimeout(() => { btn.innerHTML = PAY_BTN_HTML; }, 3500);
-    });
+    }
+  }
 
-    btn.innerHTML = PAY_BTN_HTML;
-    btn.disabled = false;
-    rzp.open();
+  // ─── CONFIRMATION POPUP ───
+  function showConfirmationModal(firstNameRaw) {
+    const firstName = (firstNameRaw || '').split(' ')[0];
+
+    const overlay = document.createElement('div');
+    overlay.className = 'confirm-overlay';
+    overlay.innerHTML = `
+      <div class="confirm-modal">
+        <p class="confirm-check">&#10003;</p>
+        <h3 class="confirm-title">You're registered${firstName ? ', ' + firstName : ''}.</h3>
+        <p class="confirm-body">We've received your details. Next, you'll upload your article so our editorial team can take a look.</p>
+        <button type="button" class="cta-btn cta-btn-large confirm-continue">Continue to Upload</button>
+      </div>
+    `;
+    document.body.appendChild(overlay);
+
+    requestAnimationFrame(() => overlay.classList.add('visible'));
+
+    function goToUpload() {
+      window.location.href = REDIRECT_URL;
+    }
+
+    overlay.querySelector('.confirm-continue').addEventListener('click', goToUpload);
+
+    // Auto-redirect shortly after, in case the user doesn't click
+    setTimeout(goToUpload, 3500);
   }
 </script>
+
+<style>
+  /* ─── CONFIRMATION MODAL ─── */
+  .confirm-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.82);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.4rem;
+    z-index: 1000;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  .confirm-overlay.visible { opacity: 1; }
+
+  .confirm-modal {
+    background: var(--black);
+    border: 1px solid var(--gray-dim);
+    max-width: 26rem;
+    width: 100%;
+    padding: 2.4rem 2rem;
+    text-align: center;
+    transform: translateY(12px);
+    transition: transform 0.3s ease;
+  }
+  .confirm-overlay.visible .confirm-modal { transform: translateY(0); }
+
+  .confirm-check {
+    width: 2.6rem;
+    height: 2.6rem;
+    line-height: 2.6rem;
+    border-radius: 50%;
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    font-size: 1.2rem;
+    margin: 0 auto 1.2rem;
+  }
+
+  .confirm-title {
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-bottom: 0.8rem;
+  }
+
+  .confirm-body {
+    font-size: 0.92rem;
+    font-weight: 300;
+    color: var(--gray);
+    line-height: 1.7;
+    margin-bottom: 1.8rem;
+  }
+
+  .confirm-continue { width: 100%; }
+</style>
 
 <style>
   /* Shake animation via class, not inline style, so it doesn't override CSS transitions */
